@@ -1,0 +1,19 @@
+<?php
+// Zabbix GUI configuration file.
+global $DB;
+
+$DB['TYPE']     = 'MYSQL';
+$DB['SERVER']   = '{{ mysql_host }}';
+$DB['PORT']     = '3306';
+$DB['DATABASE'] = '{{ zbx_db_name }}';
+$DB['USER']     = '{{ zbx_db_user }}';
+$DB['PASSWORD'] = '{{ zbx_db_password }}';
+
+// Schema name. Used for IBM DB2 and PostgreSQL.
+$DB['SCHEMA'] = '';
+
+$ZBX_SERVER      = '{{ zbx_srv_address }}';
+$ZBX_SERVER_PORT = '10051';
+$ZBX_SERVER_NAME = '{{ zbx_srv_name }}';
+
+$IMAGE_FORMAT_DEFAULT = IMAGE_FORMAT_PNG;

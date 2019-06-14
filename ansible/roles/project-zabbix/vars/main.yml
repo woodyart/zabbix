@@ -1,0 +1,33 @@
+zbx_repo: https://repo.zabbix.com/zabbix/4.2/ubuntu/pool/main/z/zabbix-release/zabbix-release_4.2-1+bionic_all.deb
+zbx_packages:
+  - zabbix-server-mysql
+  - zabbix-frontend-php
+  - zabbix-agent
+
+zbx_db_name: zabbix
+zbx_db_encofing: utf8
+zbx_db_collation: utf8_bin
+zbx_db_user: zabbix
+zbx_db_password: JJp83wEMhtwqMWrS
+zbx_db_schema: /usr/share/doc/zabbix-server-mysql/create.sql.gz
+
+zbx_srv_address: 127.0.0.1
+zbx_srv_name: my_server
+zbx_srv_template: zabbix_server.conf.j2
+zbx_srv_dest: /etc/zabbix/zabbix_server.conf
+zbx_srv_service: zabbix-server
+
+zbx_front_template: zabbix.conf.php.j2
+zbx_front_dest: /etc/zabbix/web/zabbix.conf.php
+zbx_front_service: apache2
+
+zbx_agent_service: zabbix-agent
+
+zbx_vhost_template: zabbix.conf.j2
+zbx_vhost_dest: /etc/apache2/conf-enabled/zabbix.conf
+
+
+mysql_host: 127.0.0.1
+mysql_defaults: /etc/mysql/debian.cnf
+
+php_timezone: Europe/Moscow

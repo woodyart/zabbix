@@ -1,0 +1,10 @@
+- name: Upgrade to latest packages versions
+  apt:
+    upgrade: yes
+    update_cache: yes
+    cache_valid_time: 86400 #One day
+
+- name: Install packages
+  apt:
+    name: "{{ packages }}"
+    update_cache: yes

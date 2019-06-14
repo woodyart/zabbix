@@ -1,0 +1,80 @@
+- name: Install Zabbix Repository package
+  apt:
+    deb: "{{ zbx_repo }}"
+
+- name: Install Zabbix packages
+  apt:
+    name: "{{ zbx_packages }}"
+    update_cache: yes
+
+- name: Create MySQL database
+  mysql_db:
+    name: "{{ zbx_db_name }}"
+    encoding: "{{ zbx_db_encofing }}"
+    collation: "{{ zbx_db_collation }}"
+    state: present
+    config_file: "{{ mysql_defaults }}"
+  register: db
+
+- name: Create MySQL user
+  mysql_user:
+    name: "{{ zbx_db_user }}"
+    password: "{{ zbx_db_password }}"
+    host: "{{ mysql_host }}"
+    priv: "{{ zbx_db_name }}.*:ALL"
+    state: present
+    config_file: "{{ mysql_defaults }}"
+
+- name: Import MySQL initial schema
+  mysql_db:
+    name: "{{ zbx_db_name }}"
+    target: "{{ zbx_db_schema }}"
+    state: import
+    config_file: "{{ mysql_defaults }}"
+  when: db.changed
+
+- name: Add Zabbix Server config
+  template:
+    src: "{{ zbx_srv_template }}"
+    dest: "{{ zbx_srv_dest }}"
+    owner: root
+    group: root
+    mode: 0644
+  register: srv
+
+- name: Add Zabbix Frontend config
+  template:
+    src: "{{ zbx_front_template }}"
+    dest: "{{ zbx_front_dest }}"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Add Apache vhost config
+  template:
+    src: "{{ zbx_vhost_template }}"
+    dest: "{{ zbx_vhost_dest }}"
+    owner: root
+    group: root
+    mode: 0644
+  register: vhost
+
+- name: Run Zabbix Server service
+  service:
+    name: "{{ zbx_srv_service }}"
+    enabled: yes
+    state: restarted
+  when: srv.changed
+
+- name: Run Web server
+  service:
+    name: "{{ zbx_front_service }}"
+    enabled: yes
+    state: reloaded
+  when: vhost.changed
+
+- name: Run Zabbix Agent service
+  service:
+    name: "{{ zbx_agent_service }}"
+    enabled: yes
+    state: restarted
