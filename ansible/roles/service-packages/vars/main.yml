@@ -9,3 +9,4 @@ packages:
   - whois
   - atop
   - idn2
+  - python3-pymysql

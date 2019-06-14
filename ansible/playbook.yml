@@ -3,5 +3,4 @@
 
   roles:
     - service-packages
-    - service-users
     - project-zabbix
